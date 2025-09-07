@@ -1,16 +1,21 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
-
-dotenv.config();
+const connectDB = require('./config/db');
+require('dotenv').config();
 
 const app = express();
-app.use(cors());
+
+// Connect to database
+connectDB();
+
+// Init Middleware
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('RehabAI+ Server is running!');
-});
+app.get('/', (req, res) => res.send('API Running'));
+
+// Define Routes
+app.use('/api/auth', require('./api/auth'));
+app.use('/api/exercises', require('./api/exercises'));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
